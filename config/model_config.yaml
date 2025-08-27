@@ -1,0 +1,72 @@
+# SAR Oil Spill Detection System Configuration
+
+# Image Processing Settings
+image_processing:
+  target_size: [512, 512]
+  normalize: true
+  enhance_contrast: true
+  despeckle: true
+  augmentation: true
+
+# Deep Learning Model Settings
+deep_learning:
+  batch_size: 8
+  learning_rate: 0.001
+  epochs: 100
+  early_stopping_patience: 15
+  optimizer: 'adam'
+  loss_function: 'focal_loss'  # Better for imbalanced segmentation
+  
+  # Model-specific configurations
+  unet:
+    encoder_depth: 5
+    decoder_channels: [256, 128, 64, 32, 16]
+    dropout: 0.2
+    activation: 'relu'
+  
+  segformer:
+    model_name: 'nvidia/mit-b0'
+    num_classes: 3
+    fine_tune_layers: -2
+  
+  deeplabv3:
+    backbone: 'resnet50'
+    output_stride: 16
+    atrous_rates: [6, 12, 18]
+
+# Traditional Method Settings
+traditional_methods:
+  adaptive_threshold:
+    block_size: 11
+    C: 2
+    max_iterations: 10
+  
+  kmeans:
+    n_clusters: 3
+    max_iter: 100
+    random_state: 42
+  
+  superpixel:
+    n_segments: 300
+    compactness: 10
+    sigma: 1
+
+# Evaluation Settings
+evaluation:
+  metrics: ['jaccard', 'dice', 'boundary_f1', 'pixel_accuracy', 'mean_iou']
+  visualization_enabled: true
+  save_predictions: true
+  confusion_matrix: true
+
+# System Settings
+system:
+  use_gpu: true
+  mixed_precision: true
+  log_level: 'INFO'
+  random_seed: 42
+  
+# Paths
+paths:
+  model_save_dir: 'models/saved_models'
+  results_dir: 'results'
+  logs_dir: 'logs'
